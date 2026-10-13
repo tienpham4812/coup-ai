@@ -1,6 +1,11 @@
 # Coup AI - Court of Deception
 
+[![Play Online](https://img.shields.io/badge/Play%20Online-GitHub%20Pages-success?style=for-the-badge&logo=github)](https://tienpham4812.github.io/coup-ai/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
 A web-based digital edition of the bluffing, bribery, and deduction board game **Coup**, built with modern Vanilla JavaScript, CSS3 design systems, and autonomous AI agents.
+
+🎮 **[Play Live Now in Your Browser](https://tienpham4812.github.io/coup-ai/)**
 
 ![Coup Game](assets/screenshot.png)
 

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coup AI - Court of Deception | Play Coup Board Game Online</title>
+  <meta name="description" content="Play the classic bluffing and deduction board game Coup against advanced AI opponents with unique personalities, card counting, and probability tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <h1 class="brand-title">COUP</h1>
+        <span class="brand-badge">AI EDITION</span>
+      </div>
+      <div class="nav-controls">
+        <label for="select-game-speed" style="font-size:0.8rem; color:var(--text-secondary); display:flex; align-items:center; gap:6px;">
+          Speed:
+          <select id="select-game-speed" class="btn-icon" style="width:auto; padding:4px 8px; font-size:0.8rem;">
+            <option value="600">Fast</option>
+            <option value="1000" selected>Normal</option>
+            <option value="1600">Cinematic</option>
+          </select>
+        </label>
+        <button id="btn-sound-toggle" class="btn-icon" title="Toggle Sound">🔊</button>
+        <button id="btn-rules-toggle" class="btn-icon" title="Rules & Roles Cheat Sheet">📜</button>
+        <button id="btn-restart-game" class="btn-primary">New Match</button>
+      </div>
+    </header>
+
+    <!-- Main Game Arena -->
+    <main class="main-stage">
+      <section class="table-viewport">
+        <!-- AI Opponents Row -->
+        <div class="opponents-row" id="opponents-row">
+          <!-- Dynamically populated AI seats -->
+        </div>
+
+        <!-- Center Court Table -->
+        <div class="center-board">
+          <!-- Treasury Pile -->
+          <div class="board-widget">
+            <div class="treasury-pile">
+              <span class="treasury-count" id="treasury-count">42</span>
+            </div>
+            <span class="widget-label">Treasury</span>
+          </div>
+
+          <!-- Central Action & Narrative Banner -->
+          <div class="action-banner-zone">
+            <span class="action-status-pill" id="action-status-pill">ROUND 1</span>
+            <h2 class="action-headline" id="action-headline">Awaiting Game Start</h2>
+            <p class="action-subtext" id="action-subtext">The Court convenes...</p>
+            <div class="timer-bar-container" id="timer-bar-container" style="display:none;">
+              <div class="timer-bar-fill" id="timer-bar-fill"></div>
+            </div>
+          </div>
+
+          <!-- Court Deck Pile -->
+          <div class="board-widget">
+            <div class="deck-stack">
+              <span class="deck-count" id="deck-count">7</span>
+            </div>
+            <span class="widget-label">Court Deck</span>
+          </div>
+        </div>
+
+        <!-- Human Player Station -->
+        <div class="human-player-area" id="human-player-area">
+          <div class="human-header">
+            <div class="human-identity">
+              <div class="human-avatar">👤</div>
+              <div>
+                <span class="human-name">You (Noble Contender)</span>
+                <div style="font-size:0.75rem; color:var(--gold-highlight);">Influence: 2 Active Cards</div>
+              </div>
+            </div>
+            <div class="human-coins-display">
+              <span class="coin-icon"></span>
+              <span class="human-coins-count" id="human-coins-count">2</span>
+              <span style="font-size:0.8rem; color:var(--gold-text); font-weight:600;">COINS</span>
+            </div>
+          </div>
+
+          <!-- Human Hand (Cards) -->
+          <div class="human-hand-container" id="human-hand-container">
+            <!-- Dynamically populated influence cards -->
+          </div>
+
+          <!-- Human Action Control Buttons -->
+          <div class="action-controls-grid" id="action-controls-grid">
+            <button class="action-btn" data-action="income" title="Take 1 coin from treasury. Unblockable & unchallengeable.">
+              <span class="action-btn-name">Income</span>
+              <span class="action-btn-cost">+1 Coin</span>
+              <span class="action-btn-role">General</span>
+            </button>
+
+            <button class="action-btn" data-action="foreign_aid" title="Take 2 coins from treasury. Can be blocked by Duke.">
+              <span class="action-btn-name">Foreign Aid</span>
+              <span class="action-btn-cost">+2 Coins</span>
+              <span class="action-btn-role">General</span>
+            </button>
+
+            <button class="action-btn" data-action="coup" title="Pay 7 coins. Target player loses 1 influence immediately. Unblockable. Mandatory at 10+ coins.">
+              <span class="action-btn-name">Coup</span>
+              <span class="action-btn-cost">Cost 7</span>
+              <span class="action-btn-role">General</span>
+            </button>
+
+            <button class="action-btn" data-action="tax" title="Take 3 coins from treasury. Can be challenged.">
+              <span class="action-btn-name">Tax</span>
+              <span class="action-btn-cost">+3 Coins</span>
+              <span class="action-btn-role">Duke</span>
+            </button>
+
+            <button class="action-btn" data-action="assassinate" title="Pay 3 coins to assassinate target player. Can be challenged or blocked by Contessa.">
+              <span class="action-btn-name">Assassinate</span>
+              <span class="action-btn-cost">Cost 3</span>
+              <span class="action-btn-role">Assassin</span>
+            </button>
+
+            <button class="action-btn" data-action="steal" title="Steal 2 coins from target player. Blocked by Captain or Ambassador. Can be challenged.">
+              <span class="action-btn-name">Steal</span>
+              <span class="action-btn-cost">+2 from Target</span>
+              <span class="action-btn-role">Captain</span>
+            </button>
+
+            <button class="action-btn" data-action="exchange" title="Draw 2 cards from court deck, choose which cards to keep, return 2. Can be challenged.">
+              <span class="action-btn-name">Exchange</span>
+              <span class="action-btn-cost">Swap Cards</span>
+              <span class="action-btn-role">Ambassador</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sidebar: Action Log, AI Thought Inspector & Odds -->
+      <aside class="sidebar-panel">
+        <nav class="sidebar-tabs">
+          <button class="sidebar-tab active" data-tab="logs">Log</button>
+          <button class="sidebar-tab" data-tab="thoughts">AI Thoughts</button>
+          <button class="sidebar-tab" data-tab="probs">Live Odds</button>
+        </nav>
+        <div class="sidebar-content" id="sidebar-logs">
+          <!-- Live action logs -->
+        </div>
+        <div class="sidebar-content" id="sidebar-thoughts" style="display:none;">
+          <!-- AI Thoughts stream -->
+        </div>
+        <div class="sidebar-content" id="sidebar-probs" style="display:none;">
+          <!-- Live probabilities -->
+        </div>
+      </aside>
+    </main>
+
+    <!-- Modal Dialog Overlays -->
+    <div class="modal-overlay" id="modal-overlay" style="display:none;">
+      <div class="modal-content" id="modal-content">
+        <!-- Dynamically injected modal content -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
